@@ -1,0 +1,26 @@
+---
+# defaults file for lab1
+usernames:
+  - staff: ashley
+    comment: Ashley Cole
+    group: students
+    gr: True
+    
+  - staff: ahmed
+    comment: Ahmed Musa
+    group: students
+    gr: True
+
+  - staff: sharon
+    comment: Sharon Stone
+    group: admins
+    gr: False
+    
+  - staff: blair
+    comment: Tony Blair
+    group: admins
+    gr: False
+
+groupnames:
+   - group: admins
+   - group: students

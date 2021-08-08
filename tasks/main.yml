@@ -1,0 +1,42 @@
+---
+# tasks file for lab1
+
+- name: Create groups
+  with_items: "{{ groupnames }}"
+  group:
+    name: "{{ item.group }}"
+    state: present  
+
+- name: Create {{ item.staff }} in admins group
+  with_items: "{{ usernames }}"
+  user:
+    name: "{{ item.staff }}"
+    password: "{{ pw | password_hash('sha512') }}"    
+    groups: admins
+    state: present
+    append: yes
+  when: '{{ item.gr }}'
+
+- name: Create {{ item.staff }} in students group
+  with_items: "{{ usernames }}"
+  user:
+    name: "{{ item.staff }}"
+    password: "{{ pw | password_hash('sha512') }}"    
+    groups: students
+    state: present
+    append: yes
+  when: 'not {{ item.gr }}'
+
+- name: Change user privilege
+  lineinfile:
+    path: /etc/sudoers
+    line: |
+        %admins ALL=(ALL) NOPASSWD: ALL
+        %students ALL=(ALL) NOPASSWD: ALL
+
+- name: Ensure {{ item.staff }} home directory exists
+  with_items: "{{ usernames }}"
+  file:
+    path: /home/{{item.staff}}/.ssh/
+    state: directory
+
